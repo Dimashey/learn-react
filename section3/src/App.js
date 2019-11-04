@@ -51,7 +51,7 @@ class App extends Component {
           <li>When you click a CharComponent, it should be removed from the entered text.</li>
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
-        <input onChange={this.inputLenghtOfText} type="text"/>
+        <input onChange={this.inputLenghtOfText} type="text" value={this.state.text}/>
         <Output number={this.state.text.length}/>
         <ValidationComponent status={textStatus}/>
         {listChar}
