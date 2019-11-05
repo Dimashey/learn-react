@@ -6,9 +6,9 @@ class App extends Component {
 
   state = {
     persons: [
-      { name: 'Max', age: '28' },
-      { name: 'Manu', age: '29' },
-      { name: 'Stephanie', age: '26' }
+      { id: 'asfa1', name: 'Max', age: '28' },
+      { id: 'vasdf1', name: 'Manu', age: '29' },
+      { id: 'asdf11', name: 'Stephanie', age: '26' }
     ],
     showPersons: false
   }
@@ -44,11 +44,13 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      transition: 'all .7s',
     };
 
     let persons = null;
@@ -68,12 +70,24 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = 'red';
+    }
+
+    const classes = [];
+
+    if (this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+
+    if (this.state.persons.length <= 1) {
+      classes.push('bold');
     }
 
     return (
       <div className="App">
         <h1>Hi, i'm a React App</h1>
-        <p>This is really working!</p>
+        <p className={classes.join(' ')}>This is really working!</p>
         <button 
           style={style}
           onClick={this.togglePersonsHandler}>Switch Name: </button>
@@ -81,7 +95,6 @@ class App extends Component {
       </div>
     );
   }
-  // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Hi, i\'m a React App'));
 }
 
 export default App;
