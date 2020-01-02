@@ -1,4 +1,4 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import { connect } from 'react-redux';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -196,9 +196,9 @@ class ContactData extends Component {
 
 const mapStateToProps = state => (
     {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        loading: state.loading
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
     }
 );
 
