@@ -1,11 +1,33 @@
-				var renderHtml = "<a href='" + item.url + "' >";
-                renderHtml += 	"<div class='code'>" + item.code +"</div>";
-                var customerName = (item.customerFirstName!=null?(item.customerFirstName+' '):'') + (item.customerName!=null?item.customerName:'');
+import React from 'react';
+import classes from './BuildControls.css';
+import BuildContol from './BuildControl/BuildControl';
 
-                if (customerName.length != 0) {
-                    renderHtml += 	"<div class='customerName'>" + customerName +"</div>";
-                }
-                if (item.totalPrice != null){
-                    renderHtml += "<div class='totalPrice'>" + item.totalPrice + "</div>";
-                }
-                renderHtml += 	"</a>";
+const controls = [
+    { label: 'Salad', type: 'salad' },
+    { label: 'Bacon', type: 'bacon' },
+    { label: 'Cheese', type: 'cheese' },
+    { label: 'Meat', type: 'meat' }
+];
+
+const buildControls = ( props ) => {
+    return (
+        <div className={classes.BuildControls}>
+            <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p>
+            {controls.map(ctrl => {
+                return <BuildContol
+                    key={ctrl.label}
+                    label={ctrl.label}
+                    added={() => props.ingridientAdded(ctrl.type)}
+                    removed={() => props.ingridientRemoved(ctrl.type)}
+                    disabled={props.disabled[ctrl.type]}
+                />
+            })}
+            <button
+                className={classes.OrderButton}
+                disabled={!props.purchasable}
+                onClick={props.ordered}>{props.isAuth ? 'ORDER NOW' : 'SIGN UP TO ORDER'}</button>
+        </div>
+    );
+};
+
+export default buildControls;
