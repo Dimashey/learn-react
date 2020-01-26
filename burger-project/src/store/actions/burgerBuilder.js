@@ -29,14 +29,8 @@ export const fetchIngredientsFailed = () => {
 };
 
 export const initIngredients = () => {
-  return dispatch => {
-      axios.get('https://burger-project-929c7.firebaseio.com/ingredients.json')
-          .then(response => {
-               dispatch(setIngredients(response.data));
-          })
-          .catch(error => {
-               dispatch(fetchIngredientsFailed());
-          });
-      };
+    return {
+      type: actionTypes.INIT_INGRIDIENTS
+    };
 };
 
