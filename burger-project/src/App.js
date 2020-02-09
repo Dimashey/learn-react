@@ -1,22 +1,25 @@
-import React, {useEffect}from 'react';
+import React, { useEffect, Suspense } from 'react';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import Checkout from './containers/Checkout/Checkout';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import Orders from './containers/Orders/Orders';
-import Auth from './containers/Auth/Auth';
 import Logout from '../src/containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 import { connect } from 'react-redux';
 
+const AsyncCheckout = React.lazy(() => import('./containers/Checkout/Checkout'));
+const AsyncOrders = React.lazy(() => import('./containers/Orders/Orders'));
+const AsyncAuth = React.lazy(() => import('./containers/Auth/Auth'));
+
 function App(props) {
+  const { onTryAutoSignUp } = props;
+
   useEffect(() => {
-      props.onTryAutoSignUp();
-  });
+      onTryAutoSignUp();
+  }, [props]);
 
   let routes = (
       <Switch>
-          <Route path="/auth" component={Auth}/>
+          <Route path="/auth" render={(props) => <AsyncAuth {...props}/>}/>
           <Route path="/" exact component={BurgerBuilder}/>
           <Redirect to="/"/>
       </Switch>
@@ -25,10 +28,10 @@ function App(props) {
   if (props.isAuthenticated) {
       routes = (
           <Switch>
-              <Route path="/checkout" component={Checkout}/>
-              <Route path="/orders" component={Orders}/>
+              <Route path="/checkout" render={(props) => <AsyncCheckout {...props}/>}/>
+              <Route path="/orders" render={(props) =>  <AsyncOrders {...props}/> }/>
               <Route path="/logout" component={Logout}/>
-              <Route path="/" exact component={BurgerBuilder}/>
+              <Route path="/" exact render={(props) => <AsyncAuth {...props}/>}/>
               <Redirect to="/"/>
           </Switch>
       )
@@ -37,7 +40,9 @@ function App(props) {
   return (
       <div>
           <Layout>
-              {routes}
+              <Suspense fallback={<p>Loading...</p>}>
+                {routes}
+              </Suspense>
           </Layout>
       </div>
   );
@@ -55,4 +60,9 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(App)
+);
